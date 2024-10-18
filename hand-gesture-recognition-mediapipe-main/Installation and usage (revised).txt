@@ -1,0 +1,95 @@
+#hand gesture and recognition using mediapipe
+
+Requirements
+* MediaPipe 0.8.1
+* OpenCV 3.4.2 or newer
+* TensorFlow 2.3.0 or newer 
+* tf-nightly 2.5.0.dev or newer (Only when creating a TFLite for an LSTM model)
+* scikit-learn 0.23.2 or newer (Only if you wish to display the confusion matrix) 
+* matplotlib 3.3.2 or newer (Only if you wish to display the confusion matrix)
+
+
+#	Installation of pre-requisite libraries
+###	Python
+
+1) Download and install the latest version of Python from python.org
+2)To install the required packages, open the command prompt and type in the following commands:
+- MediaPipe:	"pip install mediapipe"
+- OpenCV:	"pip install opencv-python"
+- TensorFlow: 	"pip install tensorflow"
+- scikit-learn:	"pip install -U scikit-learn"
+- matplotlib: 	"pip install matplotlib"
+
+
+# Directory
+
+│  app.py
+│  keypoint_classification.ipynb
+│  point_history_classification.ipynb
+│  
+├─model
+│  ├─keypoint_classifier
+│  │  │  keypoint.csv
+│  │  │  keypoint_classifier.hdf5
+│  │  │  keypoint_classifier.py
+│  │  │  keypoint_classifier.tflite
+│  │  └─ keypoint_classifier_label.csv
+│  │          
+│  └─point_history_classifier
+│      │  point_history.csv
+│      │  point_history_classifier.hdf5
+│      │  point_history_classifier.py
+│      │  point_history_classifier.tflite
+│      └─ point_history_classifier_label.csv
+│          
+└─utils
+    └─cvfpscalc.py
+
+
+# Setting up the training program
+# Data collection
+
+1) Open the keypoint_classifier_label.csv file and add (or change) the name of your gesture. For example we will add a new gesture "peace sign" on line 5.
+
+2) Run the hand gesture recognition app ("py app.py" in cmd).
+
+3) Once the program video output is on, press "K" to enter Keypoint Logging mode. [MODE:Logging Key Point]
+
+4) Record your gesture key points by pressing the key number that corresponds to the index of the gesture in the keypoint_classifier_label.csv file, e.g.,
+"Peace sign" is in index 4, so we press "4" to record a set of key points for it.
+
+5) For an accurate detection rate of 85% and above, 80+ sets of key points are recommended. Record your gesture at different angles and distances from the camera for better accuracy.
+
+6) Once recording is done, close the application and check "keypoint.csv" under file model and scroll down to check if index 4.0 key points have been succesfully recorded
+
+
+### Training the model
+
+1) Open the command prompt and move directory to the app directory.
+
+2) Enter "jupyter notebook" to launch Jupyter in your internet browser.
+
+3) Open "keypoint_classification_EN.ipynb"
+
+4) Change the NUM_CLASSES in line 3 to the number of classes/gestures you have created in "keypoint_classifier_label.csv"
+
+5) Under the cell tab, click "Run all".
+
+
+### Running the application/test cases
+
+1) Run the app and check if the system recognises the newly added class/gesture.
+2) If it doesn't, record more sets of key points and retrain the model.
+
+### Configuring the gesture
+
+1) Go to line 176 in the app code.
+
+2) Use if statements to control individual gestures using the pynput library.
+
+3) Example: if keypoint_classifier_labels[hand_sign_id] == "left"
+		keyboard.press("a")
+	   if keypoint_classifier_labels[hand_sign_id] == "pointer"
+		mouse.position(x,y)
+
+4) Rerun the application.
